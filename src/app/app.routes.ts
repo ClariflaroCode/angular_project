@@ -3,6 +3,8 @@ import {SimulationsListComponent} from './simulations-list-component/simulations
 import {AboutComponent} from './about-component/about-component';
 import {CurrentSimulationGraph} from './current-simulation-graph/current-simulation-graph';
 import {GraphComponent} from './graph-component/graph-component';
+import {ProcessFormComponent} from './process-form-component/process-form-component';
+import {AlgorithmFormComponent} from './algorithm-form-component/algorithm-form-component';
 
 export const routes: Routes = [
   {
@@ -23,8 +25,12 @@ export const routes: Routes = [
     component: AboutComponent
   },
   {
-    path: 'procesos',
-    component: AboutComponent
+    path: 'proceso',
+    component: ProcessFormComponent
+  },
+  {
+    path: 'algoritmo',
+    component: AlgorithmFormComponent
   },
 
 ];

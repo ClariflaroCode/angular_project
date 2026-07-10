@@ -1,1 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+  --primary-color: rgb(0, 26, 255);
+  --secondary-color: rgb(157, 167, 253);
+  --third-color: rgb(217, 203, 253);
+  --alert-color: rgb(48, 79, 126);
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Courier New', Courier, monospace;
+  color: var(--secondary-color);
+}
+
+body {
+  height: 100%;
+}
+

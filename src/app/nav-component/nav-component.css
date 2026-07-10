@@ -1,0 +1,10 @@
+nav ul {
+  display: flex;
+  list-style: none;
+  justify-content: space-around;
+  padding: 1rem 0;
+}
+a {
+  text-decoration: none;
+  font-size: 18px;
+}
