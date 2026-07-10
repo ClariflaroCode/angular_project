@@ -1,9 +1,12 @@
 <section id="listado-procesos" >
   <h2> Listado de Procesos </h2>
-  @for(proceso of procesos; track proceso) {
-    <app-process-component></app-process-component>
+  <p>Cantidad: {{ procesos().length }}</p>
+
+  @for(proceso of procesos(); track proceso) {
+    <app-process-component [processData]="proceso"></app-process-component>
   }
-  <!--@empty {
+  <!--
+  @empty {
     <h3>No hay procesos</h3>
   }-->
 </section>

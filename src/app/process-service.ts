@@ -1,7 +1,6 @@
-import {Injectable, Service} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import { HttpClient, HttpEvent } from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {ProcessComponent} from './process-component/process-component';
 import {i_process} from './process-component/process-interface';
 
 const recurso = "proceso";
@@ -17,10 +16,16 @@ const URL = "https://6a5138efc576c846dcba4183.mockapi.io/" + recurso;
 export class ProcessService {
   constructor(private http: HttpClient) { }
 
-  /** Consume la API de cervezas y devuelve un observable a la respuesta. */
+
   public getAll(): Observable<i_process[]> {
-    // fetch('url', {method: 'GET'})
+
     return this.http.get<i_process[]>(URL);
   }
+  public post(process: i_process): Observable<HttpEvent<i_process>> {
+    return this.http.post<i_process>(URL, process, {
+      observe: 'events'
+    });
+  }
+
 
 }

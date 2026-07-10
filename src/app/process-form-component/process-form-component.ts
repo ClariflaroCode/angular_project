@@ -46,7 +46,7 @@ export class ProcessFormComponent {
       arrivalTime: proceso.arrivalTime,
       state: state
     };
-
+    //hacer acá el post.
 
   }
 }

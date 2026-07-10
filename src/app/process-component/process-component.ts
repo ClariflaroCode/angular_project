@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, Input, input} from '@angular/core';
+import {i_process} from './process-interface';
 
 @Component({
   selector: 'app-process-component',
@@ -6,6 +7,9 @@ import { Component } from '@angular/core';
   templateUrl: './process-component.html',
   styleUrl: './process-component.css',
 })
-export class ProcessComponent {
 
+export class ProcessComponent {
+  @Input()processData!: i_process;
+  constructor() {
+  }
 }

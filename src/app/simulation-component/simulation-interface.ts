@@ -1,4 +1,5 @@
 export interface i_simulation{
+  id: number,
   simulation_name: string,
   process_time: number,
   context_switches: number,
@@ -7,6 +8,5 @@ export interface i_simulation{
   average_waiting_time: number,
   average_throughput: number,
   algorithm: string,
-  //quantum: number,
-  simulation_priority: number,
+  quantum: number,
 }

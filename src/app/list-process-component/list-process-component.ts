@@ -1,4 +1,4 @@
-import {Component, Injectable} from '@angular/core';
+import {ChangeDetectorRef, Component, Injectable, signal} from '@angular/core';
 import {SimulationComponent} from '../simulation-component/simulation-component';
 import {ProcessComponent} from '../process-component/process-component';
 import {HttpClient} from '@angular/common/http';
@@ -9,19 +9,25 @@ import {i_process} from '../process-component/process-interface';
 @Component({
   selector: 'app-list-process-component',
   imports: [
-    SimulationComponent,
     ProcessComponent
   ],
+  standalone: true,
   templateUrl: './list-process-component.html',
   styleUrl: './list-process-component.css',
 })
 
 export class ListProcessComponent {
-  procesos:  i_process[] = [];
+  procesos = signal<i_process[]>([]);
   constructor(private servicioDeProcesos: ProcessService) {
+
   }
   ngOnInit(): void {
+
     this.servicioDeProcesos.getAll()
-      .subscribe(procesos => this.procesos = procesos);
+      .subscribe(procesos => {
+        this.procesos.set(procesos);
+        //this.cdr.detectChanges();
+      });
+
   }
 }

@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
+import {i_process} from '../process-component/process-interface';
+import {i_simulation} from './simulation-interface';
 
 @Component({
   selector: 'app-simulation-component',
@@ -7,6 +9,8 @@ import { Component } from '@angular/core';
   styleUrl: './simulation-component.css',
 })
 export class SimulationComponent {
-  protected simulacion: any;
+  @Input()simulationData!: i_simulation;
+  constructor() {
+  }
 
 }

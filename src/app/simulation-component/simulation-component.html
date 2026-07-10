@@ -1,22 +1,19 @@
 <h4>Simulacion</h4>
 <article class="card" >
-  <h2>Simulación ID: {{ simulacion.ID }}</h2>
+  <h2>Simulación ID: {{ simulationData.id }}</h2>
 
   <ul class="card-footer">
-    <li>Nombre: {{simulacion.Nombre}}</li>
-    <li>Algoritmo: {{simulacion.Algoritmo}} </li>
-    @if (simulacion.Quantum) {
-      <li>Quantum: {{simulacion.Quantum}} </li>
+    <li>Nombre: {{simulationData.simulation_name}}</li>
+    <li>Algoritmo: {{simulationData.algorithm}} </li>
+    @if (simulationData.quantum) {
+      <li>Quantum: {{simulationData.quantum}} </li>
     }
-    @if (simulacion.Prioridad) {
-      <li>Prioridad: {{simulacion.Prioridad}}</li>
-    }
-    <li>Tiempo de Proceso: {{simulacion.ProcessTime}}</li>
-    <li>Tiempo de Despacho: {{simulacion.DispatchLatency}}</li>
-    <li>Tiempo Promedio de Turnaround: {{simulacion.AverageTurnaroundTime}}</li>
-    <li>Tiempo Promedio de Waiting time: {{simulacion.AverageWaitingTime}}</li>
-    <li>Rendimiento Promedio/Throughput: {{simulacion.AverageThroughput}}</li>
-    <li>Cambios: {{simulacion.ContextSwitches}}</li>
+    <li>Tiempo de Proceso: {{simulationData.process_time}}</li>
+    <li>Tiempo de Despacho: {{simulationData.dispatch_latency}}</li>
+    <li>Tiempo Promedio de Turnaround: {{simulationData.average_turnaround_time}}</li>
+    <li>Tiempo Promedio de Waiting time: {{simulationData.average_waiting_time}}</li>
+    <li>Rendimiento Promedio/Throughput: {{simulationData.average_throughput}}</li>
+    <li>Cambios: {{simulationData.context_switches}}</li>
 
   </ul>
   <!--
