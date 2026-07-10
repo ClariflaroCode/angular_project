@@ -1,0 +1,11 @@
+<article class="card">
+  <header class="card-header"><h3>{{this.getQueueName()}}</h3></header>
+  <footer class="card-footer">
+    <ul>
+      <li>
+        <!--<a [routerLink]="[/procesos?estado={{this.getQueueName()}}]" class="button">Ver más</a>-->
+        <a [routerLink]="['/procesos']" [queryParams]="{ estado: queueName }" class="button">Ver más</a>
+      </li>
+    </ul>
+  </footer>
+</article>

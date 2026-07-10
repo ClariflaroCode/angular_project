@@ -1,0 +1,24 @@
+<section id="lista-procesos">
+  <form [formGroup]="processForm" class="form" (submit)="onSubmit()">
+    <fieldset>
+      <legend>Crear proceso</legend>
+
+      <label for="nombre">Nombre</label>
+      <input name="name" id="nombre" type="text" formControlName="processName" placeholder="Ingrese el nombre del proceso" />
+
+      <label for="prioridad">Prioridad</label>
+      <input type="number" name="priority" id="prioridad" formControlName="priority" placeholder="Ingrese la prioridad del proceso" />
+
+      <label for="burst_time">Burst Time</label>
+      <input type="number" name="burst_time" id="burst_time" formControlName="burstTime" placeholder="Ingrese el burst time del proceso" required />
+
+      <label for="arrival_time">Arrival time</label>
+      <input type="number" name="arrival_time" id="arrival_time" formControlName="arrivalTime" placeholder="Ingrese el arrival time del proceso" required />
+
+      <!--<input type="hidden" name="estado" id="estado" formControlName="state"/>-->
+
+
+      <button class="button" type="submit">Enviar</button>
+    </fieldset>
+  </form>
+</section>
