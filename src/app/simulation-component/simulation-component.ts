@@ -7,5 +7,6 @@ import { Component } from '@angular/core';
   styleUrl: './simulation-component.css',
 })
 export class SimulationComponent {
+  protected simulacion: any;
 
 }

@@ -1,6 +1,9 @@
-<p>list-process-component works!</p>
-<section>
-  @for(process of processes; track process) {
-
+<section id="listado-procesos" >
+  <h2> Listado de Procesos </h2>
+  @for(proceso of procesos; track proceso) {
+    <app-process-component></app-process-component>
   }
+  <!--@empty {
+    <h3>No hay procesos</h3>
+  }-->
 </section>

@@ -1,1 +1,32 @@
-<p>simulation-component works!</p>
+<h4>Simulacion</h4>
+<article class="card" >
+  <h2>Simulación ID: {{ simulacion.ID }}</h2>
+
+  <ul class="card-footer">
+    <li>Nombre: {{simulacion.Nombre}}</li>
+    <li>Algoritmo: {{simulacion.Algoritmo}} </li>
+    @if (simulacion.Quantum) {
+      <li>Quantum: {{simulacion.Quantum}} </li>
+    }
+    @if (simulacion.Prioridad) {
+      <li>Prioridad: {{simulacion.Prioridad}}</li>
+    }
+    <li>Tiempo de Proceso: {{simulacion.ProcessTime}}</li>
+    <li>Tiempo de Despacho: {{simulacion.DispatchLatency}}</li>
+    <li>Tiempo Promedio de Turnaround: {{simulacion.AverageTurnaroundTime}}</li>
+    <li>Tiempo Promedio de Waiting time: {{simulacion.AverageWaitingTime}}</li>
+    <li>Rendimiento Promedio/Throughput: {{simulacion.AverageThroughput}}</li>
+    <li>Cambios: {{simulacion.ContextSwitches}}</li>
+
+  </ul>
+  <!--
+  <details>
+
+      <summary>Ver Listado de procesos</summary>
+      ListarProcesos(procesos, "")
+  </details>
+  -->
+  <button type="button">
+    Ver Estadísticas
+  </button>
+</article>

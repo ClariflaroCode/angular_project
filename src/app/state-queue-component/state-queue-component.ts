@@ -10,7 +10,7 @@ import {RouterLink} from '@angular/router';
   styleUrl: './state-queue-component.css',
 })
 export class StateQueueComponent {
-  @Input() queueName: string = '';
+  @Input() queueName: string = ''; //lo recibe del padre.
   constructor() {
     //private queueName: string; me sigue pareciendo mágico y loco que lo de arriba haga la declaracion del atributo, cree el parametro formal y a su vez lo asigne.
   }

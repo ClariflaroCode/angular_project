@@ -5,6 +5,7 @@ import {CurrentSimulationGraph} from './current-simulation-graph/current-simulat
 import {GraphComponent} from './graph-component/graph-component';
 import {ProcessFormComponent} from './process-form-component/process-form-component';
 import {AlgorithmFormComponent} from './algorithm-form-component/algorithm-form-component';
+import {ListProcessComponent} from './list-process-component/list-process-component';
 
 export const routes: Routes = [
   {
@@ -32,5 +33,8 @@ export const routes: Routes = [
     path: 'algoritmo',
     component: AlgorithmFormComponent
   },
-
+  {
+    path: 'processes',
+    component: ListProcessComponent
+  },
 ];

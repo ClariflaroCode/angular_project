@@ -1,1 +1,8 @@
-<p>simulations-list-component works!</p>
+<section id="listado-simulaciones" >
+  <h2> Listado de Simulaciones </h2>
+  @for(simulacion of simulaciones; track simulacion) {
+      <app-simulation-component></app-simulation-component>
+  } @empty {
+    <h3>No hay simulaciones</h3>
+  }
+</section>
