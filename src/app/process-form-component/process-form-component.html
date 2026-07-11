@@ -18,7 +18,7 @@
       <!--<input type="hidden" name="estado" id="estado" formControlName="state"/>-->
 
 
-      <button class="button" type="submit">Enviar</button>
+      <button [disabled]="processForm.invalid" class="button" type="submit">Enviar</button>
     </fieldset>
   </form>
 </section>

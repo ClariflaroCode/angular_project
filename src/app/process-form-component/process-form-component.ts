@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {i_process} from '../process-component/process-interface';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-process-form-component',
@@ -9,6 +10,8 @@ import {i_process} from '../process-component/process-interface';
   styleUrl: './process-form-component.css',
 })
 export class ProcessFormComponent {
+  constructor(protected router: Router) {
+  }
   processForm = new FormGroup({
     processName: new FormControl('proceso', { nonNullable: true , validators: [Validators.required]}),
     priority: new FormControl(0, { nonNullable: true , validators: [Validators.required, Validators.min(0)]}),
@@ -17,36 +20,49 @@ export class ProcessFormComponent {
     //state: new FormControl('new')
   })
   onSubmit(){
-    const proceso = this.processForm.getRawValue();
-    /*
-    let processName = this.processForm.get("processName")?.value;
-    let priority = this.processForm.get("priority")?.value;
-    let burstTime = this.processForm.get("burstTime")?.value;
-    let arrivalTime = this.processForm.get("arrivalTime")?.value;
+    if  (this.processForm.valid) {
+      console.log('Datos del formulario:', this.processForm.value);
+
+      const proceso = this.processForm.getRawValue();
+
+      /*
+      let processName = this.processForm.get("processName")?.value;
+      let priority = this.processForm.get("priority")?.value;
+      let burstTime = this.processForm.get("burstTime")?.value;
+      let arrivalTime = this.processForm.get("arrivalTime")?.value;
 
 
-    if(!processName) {
-      processName = '';
+      if(!processName) {
+        processName = '';
+      }
+      if (!priority) {
+        priority = 0;
+      }
+      if (!burstTime) {
+        burstTime = 1;
+      }
+      if (!arrivalTime) {
+        arrivalTime = 0;
+      }
+      */
+      const state = "new";
+      const process: i_process  = {
+        name: proceso.processName,
+        priority: proceso.priority,
+        burstTime: proceso.burstTime,
+        arrivalTime: proceso.arrivalTime,
+        waitingTime: 0,
+        completionTime: 0,
+        state: state
+      };
+
+      // REDIRECCIÓN:
+      this.router.navigate(['/home']);
     }
-    if (!priority) {
-      priority = 0;
-    }
-    if (!burstTime) {
-      burstTime = 1;
-    }
-    if (!arrivalTime) {
-      arrivalTime = 0;
-    }
-    */
-    const state = "new";
-    const process: i_process  = {
-      name: proceso.processName,
-      priority: proceso.priority,
-      burstTime: proceso.burstTime,
-      arrivalTime: proceso.arrivalTime,
-      state: state
-    };
-    //hacer acá el post.
+
+
+
+
 
   }
 }

@@ -4,5 +4,7 @@ export interface i_process{
   priority: number,
   burstTime: number,
   arrivalTime: number,
-  state: 'new' | 'ready' | 'waiting' | 'terminated' | 'running', // solo admite estos estados.
+  waitingTime: number,
+  completionTime: number,
+  state: string, // solo admite estos estados.
 }

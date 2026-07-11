@@ -1,13 +1,14 @@
-<form class="form" [routerLink]="['/simulaciones']">
+<form class="form" [formGroup]="algorithmForm"  (submit)="onSubmit()">
 
   <fieldset>
     <legend>Nueva simulacion</legend>
 
     <label for="nombre">Nombre de la simulacion</label>
-    <input type="text" name="nombre" id="nombre" placeholder="Nombre de la simulacion">
+    <input type="text" name="nombre" id="nombre" formControlName="simulationName" placeholder="Nombre de la simulacion">
     <p>Nota: De momento esta solamente implementado el First come First Serve, FCFS</p>
+
     <label for="algoritmo">Elegir el algoritmo de planificacion</label>
-    <select id="algoritmo" name="algoritmo">
+    <select id="algoritmo" name="algoritmo" formControlName="algorithmName">
       <option value="first_come_first_serve">First come First Serve</option>
       <option value="round_robin">Round Robin</option>
       <option value="priority">Prioridad</option>
@@ -18,6 +19,6 @@
 
     </div>
 
-    <button type="submit" class="button">Enviar</button>
+    <button [disabled]="algorithmForm.invalid" type="submit" class="button">Enviar</button>
   </fieldset>
 </form>
