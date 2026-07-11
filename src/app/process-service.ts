@@ -17,18 +17,27 @@ export class ProcessService {
   constructor(private http: HttpClient) { }
 
 
-  public getAll(): Observable<i_process[]> {
+  /*public getAll(): Observable<i_process[]> {
 
     return this.http.get<i_process[]>(URL);
-  }
+  }*/
   public post(process: i_process): Observable<HttpEvent<i_process>> {
     return this.http.post<i_process>(URL, process, {
       observe: 'events'
     });
   }
-  public getByState(estado : string): Observable<i_process[]> {
+  /*public getByState(estado : string): Observable<i_process[]> {
     const parametros = 'state=' + estado;
     let params = new HttpParams({fromString: parametros });
+    return this.http.get<i_process[]>(URL, { params });
+  }*/
+  public getAll(estado: string | null = null): Observable<i_process[]> {
+    let params = new HttpParams();
+
+    if (estado) {
+      params = params.set('state', estado);
+    }
+
     return this.http.get<i_process[]>(URL, { params });
   }
 
