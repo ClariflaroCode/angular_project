@@ -1,6 +1,9 @@
 <section id="listado-procesos" >
   <h2> Listado de Procesos </h2>
   <p>Cantidad: {{ procesos().length }}</p>
+  @if(estadoParticular != '') {
+    <h3>{{estadoParticular}}</h3>
+  }
 
   @for(proceso of procesos(); track proceso) {
     <app-process-component [processData]="proceso"></app-process-component>

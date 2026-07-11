@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {StateQueueComponent} from '../state-queue-component/state-queue-component';
-import {Router, RouterLink} from '@angular/router';
+import {Router} from '@angular/router';
 import {SchedulerService} from '../scheduler-service';
 import {ProcessService} from '../process-service';
 import {SimulationService} from '../simulation-service';
@@ -22,21 +22,13 @@ export class GraphComponent {
 
   protected onclick(){
 
-
-
     //TO-DO implementar metodo que busque por estado.
-  //console.log('entre al componente');
+
     this.processService.getAll().subscribe({
       next: (newQueue) => {
-        //console.log('pase el primer get');
         const ultimaSimulacion = this.schedulerService.ejecutarSimulacion(newQueue);
-        //console.log("pase el ejecutar simulacion");
         this.simulationService.post(ultimaSimulacion).subscribe({
           next: (data) => {
-            //console.log("entramos al segundo suscribe");
-
-            //console.log('Simulación guardada:', data);
-
             this.router.navigate(['/estadisticas']);
           },
           error: (err) => console.error('Error al guardar:', err)

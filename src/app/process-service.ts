@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import { HttpClient, HttpEvent } from '@angular/common/http';
+import {HttpClient, HttpEvent, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {i_process} from './process-component/process-interface';
 
@@ -26,6 +26,10 @@ export class ProcessService {
       observe: 'events'
     });
   }
-
+  public getByState(estado : string): Observable<i_process[]> {
+    const parametros = 'state=' + estado;
+    let params = new HttpParams({fromString: parametros });
+    return this.http.get<i_process[]>(URL, { params });
+  }
 
 }

@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {RouterLink} from '@angular/router';
-import {i_process} from '../process-component/process-interface';
-import {i_simulation} from '../simulation-component/simulation-interface';
 import {ValidationError} from '@angular/forms/signals';
 import { Router} from '@angular/router';
 import {SimulationService} from '../simulation-service';

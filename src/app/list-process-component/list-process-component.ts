@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, Injectable, signal} from '@angular/core';
+import {ChangeDetectorRef, Component, Injectable, Input, signal} from '@angular/core';
 import {SimulationComponent} from '../simulation-component/simulation-component';
 import {ProcessComponent} from '../process-component/process-component';
 import {HttpClient} from '@angular/common/http';
@@ -18,9 +18,12 @@ import {i_process} from '../process-component/process-interface';
 
 export class ListProcessComponent {
   procesos = signal<i_process[]>([]);
+  @Input() estadoParticular = '';
+
   constructor(private servicioDeProcesos: ProcessService) {
 
   }
+
   ngOnInit(): void {
 
     this.servicioDeProcesos.getAll()

@@ -36,4 +36,8 @@ export const routes: Routes = [
     path: 'processes',
     component: ListProcessComponent
   },
+  {
+    path: '**', //por defecto
+    redirectTo: '/home'
+  }
 ];
