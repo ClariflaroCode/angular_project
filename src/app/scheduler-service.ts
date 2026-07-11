@@ -13,42 +13,73 @@ export class SchedulerService {
   terminatedQueue = signal<i_process[]>([]);
 
   algoritmoElegido = "FIFO";
+
   constructor() {
 
   }
-  public getClock(){
+
+  public getClock() {
     return this.clock;
   }
+
   public getAlgoritmo() {
     return this.algoritmoElegido;
   }
-  public setClock( c: number) {
-  this.clock = c;
+
+  public setClock(c: number) {
+    this.clock = c;
   }
 
-  public ejecutarSimulacion(newQueue: i_process[]){
+  public ejecutarSimulacion(newQueue: i_process[]) {
     this.setClock(0);
 
     let ultimaSimulacion = this.getLastSimulacion();
 
-    let  currentQuantum = 0;
+    let currentQuantum = 0;
     let localReady: i_process[] = [];
     let localWaiting: i_process[] = [];
     let localTerminated: i_process[] = [];
     let localRunning: i_process | null = null;
 
+    console.log('entramos al ejecutar');
+    while (
+      (newQueue.length > 0 ||
+        localReady.length > 0 ||
+        localRunning != null ||
+        localWaiting.length > 0) &&
+      this.clock < 50
+      ) {
+      console.log('seguro bucle infinito aca');
+      console.log(
+        "clock:", this.clock,
+        "new:", newQueue.length,
+        "ready:", localReady.length,
+        "running:", localRunning,
+        "waiting:", localWaiting.length
+      );
+      console.log(newQueue);
+      console.log("clock inicial:", this.getClock());
 
-    while (newQueue.length > 0 ||
-            localReady.length > 0 ||
-            localRunning != null ||
-            localWaiting.length > 0
-      )
-    {
+      for (const p of newQueue) {
+        console.log(
+          p.name,
+          p.arrivalTime,
+          typeof p.arrivalTime
+        );
+      }
+
+
       let i = 0;
       while (i < newQueue.length) {
+        console.log(
+          "clock:", this.getClock(),
+          "arrival:", newQueue[i].arrivalTime
+        );
         if (newQueue[i].arrivalTime == this.getClock()) {
+          console.log("Eliminando", newQueue[i]);
           localReady.push(newQueue[i]);
           newQueue.splice(i, 1); //elimina a partir de la posicion i UN sólo elemento
+          console.log("Nuevo tamaño:", newQueue.length);
           i--; //porque se hace un corrimiento, no quiero moverme de la pos.
         }
         i++;
@@ -63,7 +94,7 @@ export class SchedulerService {
       }
 
       // Incremento de waiting time
-      for (let proceso of localReady){
+      for (let proceso of localReady) {
         proceso.waitingTime++;
       }
 
@@ -74,68 +105,87 @@ export class SchedulerService {
           localRunning.state = "terminated";
           //updateProcesoEstado(runningProceso.ID, "terminated") //actualizo en la DB el estado del proceso
           localRunning.completionTime = this.getClock();
+          localTerminated.push(localRunning);
+          localRunning = null;
         }
-        localTerminated.push(localRunning);
-        localRunning = null;
+
         //currentQuantum = 0
 
       }
       this.clock++;
     }
 
-              /*
-              if ultima.Quantum.Valid { //ROUND ROBIN
-                if  (currentQuantum == ultima.Quantum.Int32) {
-                  runningProceso.Estado = "ready"
-                  readyQueue = append(readyQueue, runningProceso)
-                  runningProceso = nil
-                  currentQuantum = 0
-                  if len(readyQueue) > 0 {
-                    runningProceso = readyQueue[0]
-                    //contextSwitches++
-                    runningProceso.Estado = "running"
-                    //updateProcesoEstado(readyQueue[0].ID, "running") //actualizo en la DB el estado del proceso
-                    readyQueue = readyQueue[1:] //elimino el primer elemento de la lista de ready, la ready queue se volvio la ready queue
-                  }
-                }
-              }*/
-
     this.readyQueue.set(localReady);
     this.terminatedQueue.set(localTerminated);
     this.runningProceso.set(localRunning);
 
-
-
-}
+    return this.calcularEstadisticasSimulacion();
+  }
 
   private getLastSimulacion() {
 
   }
 
   private elegirProceso(readyQueue: i_process[]) {
-
-    let proceso=  readyQueue[0];
+    let proceso;
+    switch (this.algoritmoElegido) {
+      case 'first_come_first_serve':
+        proceso = this.FirstComeFirstServe(readyQueue);
+        break;
+      //aca se supone que irían todos, es demo muchachos :D
+      default:
+        proceso = this.FirstComeFirstServe(readyQueue);
+        break;
+    }
     return proceso;
   }
+
+  private FirstComeFirstServe(readyQueue: i_process[]) {
+    let proceso = readyQueue[0]; //nos guardamos el proceso elegido.
+    readyQueue.splice(0, 1); //eliminamos el elemento de la fila de listos
+    return proceso;
+  }
+
 //return clock, terminatedQueue
 
-//}
-/*
-func FirstComeFirstServe(ready []*db.Proceso, running *db.Proceso) (*db.Proceso, []*db.Proceso){ //NOTA: los primeros parentesis son los parametros de entrada, los segundos los de salida
 
-  //Tomo el primer elemento de la lista de ready y lo paso a running si está disponible para ejecutar
-  if running != nil {
-    return running, ready
-  }
-  if len(ready) > 0 {
-    running = ready[0]
-    //contextSwitches++
-    running.Estado = "running"
-    //updateProcesoEstado(readyQueue[0].ID, "running") //actualizo en la DB el estado del proceso
-    ready = ready[1:] //elimino el primer elemento de la lista de ready, la ready queue se volvio la ready queue
-    // empezando desde el segundo elemento hasta el final por eso 1:. En go la longitud se indica con min:max
-  }
-  return running, ready
-}*/
+  private calcularEstadisticasSimulacion() {
 
+    //TO-DO calcular avg waiting time, avg turnaround time, avg response time, cpu utilization, throughput
+    //y guardar en la tabla estadisticas_simulacion
+    let turnaround_time = 0;
+    let waiting_time = 0;
+    let contextSwitches = 0;
+
+    let localTerminated = this.terminatedQueue();
+
+    for (let proceso of localTerminated) {
+      turnaround_time += proceso.completionTime - proceso.arrivalTime;
+      waiting_time += proceso.waitingTime;
+      contextSwitches++;
+
+    }
+    let averageTurnaroundTime = turnaround_time / localTerminated.length;
+    let averageWaitingTime = waiting_time /localTerminated.length;
+    let averageThroughput = localTerminated.length / this.getClock();
+
+  /*
+  ultima, err := queries.GetLastSimulacion(context.Background())
+  if err != nil {
+    log.Println("Error al obtener la última simulación:", err)
+    return
+  }*/
+      const ultimaSimulacion = {
+        name: 'hellouda',
+        process_time: this.getClock(),
+        context_switches: contextSwitches,
+        dispatch_latency: 0,
+        average_turnaround_time: averageTurnaroundTime,
+        average_waiting_time: averageWaitingTime,
+        average_throughput: averageThroughput,
+        algorithm: this.getAlgoritmo(),
+        quantum: 10,
+      }
+      return ultimaSimulacion;
+    }
 }

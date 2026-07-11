@@ -1,6 +1,5 @@
 export interface i_simulation{
-  id: number,
-  simulation_name: string,
+  name: string,
   process_time: number,
   context_switches: number,
   dispatch_latency: number,

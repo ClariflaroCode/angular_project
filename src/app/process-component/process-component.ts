@@ -12,4 +12,5 @@ export class ProcessComponent {
   @Input()processData!: i_process;
   constructor() {
   }
+
 }

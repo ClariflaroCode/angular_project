@@ -1,5 +1,4 @@
 export interface i_process{
-
   name: string,
   priority: number,
   burstTime: number,

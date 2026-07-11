@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {i_process} from '../process-component/process-interface';
 import {Router} from '@angular/router';
+import {ProcessService} from '../process-service';
 
 @Component({
   selector: 'app-process-form-component',
@@ -10,7 +11,7 @@ import {Router} from '@angular/router';
   styleUrl: './process-form-component.css',
 })
 export class ProcessFormComponent {
-  constructor(protected router: Router) {
+  constructor(protected router: Router, protected processService: ProcessService) {
   }
   processForm = new FormGroup({
     processName: new FormControl('proceso', { nonNullable: true , validators: [Validators.required]}),
@@ -55,9 +56,18 @@ export class ProcessFormComponent {
         completionTime: 0,
         state: state
       };
+      this.processService.post(process).subscribe({
+        next: (process) => {
+          console.log("entramos al segundo suscribe");
 
-      // REDIRECCIÓN:
-      this.router.navigate(['/home']);
+          console.log('Simulación guardada:', process);
+
+          this.router.navigate(['/home']);
+        },
+        error: (err) => console.error('Error al guardar:', err)
+      });
+
+
     }
 
 
