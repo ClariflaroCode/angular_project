@@ -13,6 +13,7 @@ export class SchedulerService {
   terminatedQueue = signal<i_process[]>([]);
 
   algoritmoElegido = "FIFO";
+  currentSimulation = "ejemplo";
 
   constructor() {
 
@@ -24,6 +25,15 @@ export class SchedulerService {
 
   public getAlgoritmo() {
     return this.algoritmoElegido;
+  }
+  public setAlgoritmo(algoritmo : string){
+    this.algoritmoElegido = algoritmo;
+  }
+  public getCurrentSimulationName(){
+    return this.currentSimulation;
+  }
+  public setCurrentSimulationName(name : string){
+    this.currentSimulation = name;
   }
 
   public setClock(c: number) {
@@ -176,7 +186,7 @@ export class SchedulerService {
     return
   }*/
       const ultimaSimulacion = {
-        name: 'hellouda',
+        name: this.getCurrentSimulationName(),
         process_time: this.getClock(),
         context_switches: contextSwitches,
         dispatch_latency: 0,

@@ -61,7 +61,6 @@ export class ProcessFormComponent {
           console.log("entramos al segundo suscribe");
 
           console.log('Simulación guardada:', process);
-
           this.router.navigate(['/home']);
         },
         error: (err) => console.error('Error al guardar:', err)

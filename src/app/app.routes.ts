@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import {SimulationsListComponent} from './simulations-list-component/simulations-list-component';
 import {AboutComponent} from './about-component/about-component';
-import {CurrentSimulationGraph} from './current-simulation-graph/current-simulation-graph';
 import {GraphComponent} from './graph-component/graph-component';
 import {ProcessFormComponent} from './process-form-component/process-form-component';
 import {AlgorithmFormComponent} from './algorithm-form-component/algorithm-form-component';
