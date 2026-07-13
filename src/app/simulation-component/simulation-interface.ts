@@ -1,4 +1,5 @@
 export interface i_simulation{
+  id: string | null,
   name: string,
   process_time: number,
   context_switches: number,

@@ -29,7 +29,24 @@ export class AlgorithmFormComponent {
     if (this.algorithmForm.valid) {
       this.schedulerService.setAlgoritmo(<string>this.algorithmForm.get('algorithmName')?.value);
       this.schedulerService.setCurrentSimulationName(<string>this.algorithmForm.get('simulationName')?.value);
-      this.router.navigate(['/home']);
+
+      this.simulationService.getUltima().subscribe({
+        next: (data) => {
+
+          if (data[0]) {
+            const ultimoID = data[0].id;
+            const currentID = Number(ultimoID) + 1;
+            console.log(currentID);
+            this.schedulerService.setCurrentSimulationID(String(currentID));
+          } else {
+            console.log('Es la primer simulacion de mockapi');
+            this.schedulerService.setCurrentSimulationID("1");
+          }
+          this.router.navigate(['/home']);
+
+        },
+        error: (err) => console.error('Error al guardar:', err)
+      });
     }
   }
 

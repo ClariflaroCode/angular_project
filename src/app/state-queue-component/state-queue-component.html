@@ -4,7 +4,7 @@
     <ul>
       <li>
         <!--<a [routerLink]="[/procesos?estado={{this.getQueueName()}}]" class="button">Ver más</a>-->
-        <a [routerLink]="['/processes']" [queryParams]="{ state: queueName }" class="button">Ver más</a>
+        <button [routerLink]="['/processes']" [queryParams]="{ state: queueName, id_simulacion: currentID }" [disabled]="this.currentID == '' " class="button">Ver más</button>
       </li>
     </ul>
   </footer>

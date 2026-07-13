@@ -10,6 +10,7 @@ const URL = "https://6a5138efc576c846dcba4183.mockapi.io/" + recurso;
   providedIn: 'root'
 })
 export class SimulationService {
+  private currentID= '';
   constructor(private http: HttpClient) { }
 
   public getAll(): Observable<i_simulation[]> {
@@ -21,13 +22,13 @@ export class SimulationService {
     });
   }
   public getUltima(): Observable<i_simulation[]> {
-  const params = new HttpParams()
-    .set('limit', '1')
-    .set('sortBy', 'id')
-    .set('order', 'desc');
+    const params = new HttpParams()
+      .set('limit', '1')
+      .set('sortBy', 'id')
+      .set('order', 'desc');
+    return this.http.get<any[]>(URL, { params });
+  }
 
-  return this.http.get<any[]>(URL, { params });
-}
 
 
 }

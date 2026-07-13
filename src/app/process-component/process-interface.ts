@@ -6,5 +6,6 @@ export interface i_process{
   arrivalTime: number,
   waitingTime: number,
   completionTime: number,
+  id_simulacion: string,
   state: string, // solo admite estos estados.
 }

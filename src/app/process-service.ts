@@ -40,4 +40,13 @@ export class ProcessService {
     console.log("PUT", id, structuredClone(processData));
     return this.http.put<i_process>(URL + "/" + id, processData);
   }
+  public getBySimulacion(estado: string | null = null, id_simulacion: string): Observable<i_process[]> {
+    let params = new HttpParams();
+
+    if (estado) {
+      params = params.set('state', estado);
+    }
+    params = params.set('id_simulacion', id_simulacion);
+    return this.http.get<i_process[]>(URL, { params });
+  }
 }

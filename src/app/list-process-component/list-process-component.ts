@@ -6,6 +6,7 @@ import {Observable} from 'rxjs';
 import {ProcessService} from '../process-service';
 import {i_process} from '../process-component/process-interface';
 import {ActivatedRoute, Route, Router} from '@angular/router';
+import {SchedulerService} from '../scheduler-service';
 
 @Component({
   selector: 'app-list-process-component',
@@ -22,7 +23,7 @@ export class ListProcessComponent {
   @Input() estadoParticular = '';
 
   constructor(
-    private servicioDeProcesos: ProcessService,
+    private schedulerService: SchedulerService,
     private processService: ProcessService,
     private route: ActivatedRoute
   ) {
@@ -33,7 +34,7 @@ export class ListProcessComponent {
 
     this.route.queryParamMap.subscribe(params => {
       this.processService
-        .getAll(params.get('state'))
+        .getBySimulacion(params.get('state'), this.schedulerService.getCurrentSimulationID())
         .subscribe(procesos => this.procesos.set(procesos));
     });
   }

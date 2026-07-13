@@ -3,6 +3,7 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {i_process} from '../process-component/process-interface';
 import {Router} from '@angular/router';
 import {ProcessService} from '../process-service';
+import {SchedulerService} from '../scheduler-service';
 
 @Component({
   selector: 'app-process-form-component',
@@ -11,7 +12,11 @@ import {ProcessService} from '../process-service';
   styleUrl: './process-form-component.css',
 })
 export class ProcessFormComponent {
-  constructor(protected router: Router, protected processService: ProcessService) {
+  constructor(
+    protected router: Router,
+    protected processService: ProcessService,
+    protected schedulerService: SchedulerService
+  ) {
   }
   processForm = new FormGroup({
     processName: new FormControl('proceso', { nonNullable: true , validators: [Validators.required]}),
@@ -55,6 +60,7 @@ export class ProcessFormComponent {
         arrivalTime: proceso.arrivalTime,
         waitingTime: 0,
         completionTime: 0,
+        id_simulacion: this.schedulerService.getCurrentSimulationID(),
         state: state
       };
       this.processService.post(process).subscribe({

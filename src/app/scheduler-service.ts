@@ -15,8 +15,10 @@ export class SchedulerService {
   terminatedQueue = signal<i_process[]>([]);
   public necesitaRefresco = signal<boolean>(false);
 
+
   algoritmoElegido = "FIFO";
   currentSimulation = "ejemplo";
+  private currentSimulationID: string = '';
 
   constructor(private processService: ProcessService) {
 
@@ -31,14 +33,22 @@ export class SchedulerService {
   }
   public setAlgoritmo(algoritmo : string){
     this.algoritmoElegido = algoritmo;
+    //COMO CAMBIAR EL NOMBRE O EL ALGORITMO IMPLICA UNA NUEVA SIMULACION, TENGO QUE LIMPIAR LAS SEÑALES.
+    this.reset();
   }
   public getCurrentSimulationName(){
     return this.currentSimulation;
   }
   public setCurrentSimulationName(name : string){
     this.currentSimulation = name;
+    this.reset();
   }
-
+  public setCurrentSimulationID(id: string) {
+    this.currentSimulationID = id;
+  }
+  public getCurrentSimulationID(){
+    return this.currentSimulationID;
+  }
   public setClock(c: number) {
     this.clock = c;
   }
@@ -57,8 +67,12 @@ export class SchedulerService {
     return simulacion;
   }
   public iniciarSimulacion(procesos: i_process[]) {
-    this.clock = 0;
     this.newQueue.set([...procesos]);
+    this.reset();
+
+  }
+  private reset(){
+    this.clock = 0;
 
     this.readyQueue.set([]);
     this.waitingQueue.set([]);
@@ -153,39 +167,11 @@ export class SchedulerService {
     return null;
   }
 
-  /*
-  private actualizarProcesos(){
-
-      for (let p of this.readyQueue()){
-        if(p.id){
-          this.processService.update(p.id, p).subscribe();
-        }
-      }
-
-      const running = this.runningProceso();
-
-      if(running && running.id){
-        this.processService.update(running.id, running).subscribe();
-      }
-
-      for (let p of this.waitingQueue()){
-        if(p.id){
-          this.processService.update(p.id, p).subscribe();
-        }
-      }
-
-      for (let p of this.terminatedQueue()){
-        if(p.id){
-          this.processService.update(p.id, p).subscribe();
-        }
-      }
-
-
-  }*/private actualizarProcesos(
+ private actualizarProcesos(
     ready: i_process[],
     running: i_process | null,
     terminated: i_process[]
-  ) {
+  ) {  //Esta funcion realmente no sé si está salvando algo, la idea era controlar un poco mejor las solicitudes http.
     // 1. Apagamos el refresco temporalmente
     this.necesitaRefresco.set(false);
 
@@ -289,6 +275,7 @@ export class SchedulerService {
     return
   }*/
       const ultimaSimulacion = {
+        id: null,
         name: this.getCurrentSimulationName(),
         process_time: this.getClock(),
         context_switches: contextSwitches,
@@ -301,4 +288,6 @@ export class SchedulerService {
       }
       return ultimaSimulacion;
     }
+
+
 }
