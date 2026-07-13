@@ -6,3 +6,30 @@
 #grafo {
   padding: 10rem;
 }
+.contenedorcito{
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+.button {
+  border-radius: 10px;
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 8px;
+  cursor: pointer;
+}
+.button:hover{
+  background-color: var(--alert-color);
+}
+#comenzar:hover  {
+  background-color: var(--secondary-color);
+}
+.button:active, #comenzar:active {
+  background-color: var(--primary-color);
+}
+.button-section {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+
+}

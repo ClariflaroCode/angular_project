@@ -5,10 +5,11 @@ import {SchedulerService} from '../scheduler-service';
 import {ProcessService} from '../process-service';
 import {SimulationService} from '../simulation-service';
 import {i_process} from '../process-component/process-interface';
+import {ListProcessComponent} from '../list-process-component/list-process-component';
 
 @Component({
   selector: 'app-graph-component',
-  imports: [StateQueueComponent],
+  imports: [StateQueueComponent, ListProcessComponent],
   templateUrl: './graph-component.html',
   styleUrl: './graph-component.css',
 })

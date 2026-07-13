@@ -1,11 +1,23 @@
 <h2>Simulacion {{this.getNombreSimulacion()}}</h2>
 <h2>Algoritmo: {{this.getAlgoritmo()}}</h2>
 <h2>Clock: {{this.getClock()}}</h2>
-<section id="graph-container" class="card-container">
-  @for(state of states; track state) {
-    <app-state-queue-component  [queueName]="state"></app-state-queue-component>
-  }
+<section class="contenedorcito">
+
+  <section id="graph-container" class="card-container">
+    @for(state of states; track state) {
+      <app-state-queue-component  [queueName]="state"></app-state-queue-component>
+    }
+  </section>
+  <!--<a [routerLink]="['/estadisticas']" class="button" id="comenzar">Comenzar</a>-->
+
+  <section class="button-section">
+    <button (click)="siguientePaso()" class="button">Ejecutar siguiente paso</button>
+    <button (click)="ejecucionCompleta()" class="button" id="comenzar">Ejecución completa</button>
+  </section>
+
+  <!--
+  <section class="card-container">
+    <app-list-process-component [procesos]='procesos'></app-list-process-component>
+  </section>-->
 </section>
-<!--<a [routerLink]="['/estadisticas']" class="button" id="comenzar">Comenzar</a>-->
-<button (click)="siguientePaso()" class="button">Ejecutar siguiente paso</button>
-<button (click)="ejecucionCompleta()" class="button" id="comenzar">Ejecución completa</button>
+

@@ -1,4 +1,4 @@
-<section id="listado-simulaciones" >
+<section class="card-container" id="listado-simulaciones" >
   <h2> Listado de Simulaciones </h2>
   @for(simulacion of simulaciones(); track simulacion) {
       <app-simulation-component [simulationData]="simulacion"></app-simulation-component>
