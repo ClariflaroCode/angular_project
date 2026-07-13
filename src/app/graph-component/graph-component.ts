@@ -6,10 +6,11 @@ import {ProcessService} from '../process-service';
 import {SimulationService} from '../simulation-service';
 import {i_process} from '../process-component/process-interface';
 import {ListProcessComponent} from '../list-process-component/list-process-component';
+import {AlgorithmFormComponent} from '../algorithm-form-component/algorithm-form-component';
 
 @Component({
   selector: 'app-graph-component',
-  imports: [StateQueueComponent, ListProcessComponent],
+  imports: [StateQueueComponent, ListProcessComponent, AlgorithmFormComponent],
   templateUrl: './graph-component.html',
   styleUrl: './graph-component.css',
 })
@@ -45,6 +46,10 @@ export class GraphComponent {
     });
   }
   protected siguientePaso(){
+    if (!this.datosSimulacionValidos()) {
+      alert('Falta completar el formulario de simulacion');
+      return;
+    }
     if (this.firstTime){
        this.iniciarSimulacion();
        this.firstTime = false;
@@ -65,7 +70,11 @@ export class GraphComponent {
   }
 
   protected ejecucionCompleta(){
-
+    if (!this.datosSimulacionValidos()) {
+      console.log(this.getNombreSimulacion() +' , '+ this.getAlgoritmo());
+      alert('Falta completar el formulario de simulacion');
+      return;
+    }
     const ultimaSimulacion = this.schedulerService.ejecucionSimulacion();
     this.simulationService.post(ultimaSimulacion).subscribe({
       next: (data) => {
@@ -83,5 +92,15 @@ export class GraphComponent {
   }
   public getAlgoritmo(){
     return this.schedulerService.getAlgoritmo();
+  }
+
+
+  protected datosSimulacionValidos() {
+    if (this.getAlgoritmo() == "FIFO" ||
+      (this.getNombreSimulacion() == "ejemplo" || this.getNombreSimulacion() == '' ))
+    {
+      return false;
+    }
+    return true;
   }
 }

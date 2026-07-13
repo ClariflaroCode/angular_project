@@ -1,11 +1,11 @@
 <form class="form" [formGroup]="algorithmForm"  (submit)="onSubmit()">
 
   <fieldset>
+
     <legend>Nueva simulacion</legend>
 
     <label for="nombre">Nombre de la simulacion</label>
     <input type="text" name="nombre" id="nombre" formControlName="simulationName" placeholder="Nombre de la simulacion">
-    <p>Nota: De momento esta solamente implementado el First come First Serve, FCFS</p>
 
     <label for="algoritmo">Elegir el algoritmo de planificacion</label>
     <select id="algoritmo" name="algoritmo" formControlName="algorithmName">
@@ -15,10 +15,12 @@
       <option value="shortest_job_first">Shortest Job First sin desalojo</option>
       <option value="shortest_job_first_preemptive">Shortest Job First con desalojo</option>
     </select>
+    <p>Nota: De momento esta solamente implementado el First come First Serve, FCFS</p>
+
     <div id="opciones-extra">
 
     </div>
 
-    <button [disabled]="algorithmForm.invalid" type="submit" class="button">Enviar</button>
+    <button [disabled]="algorithmForm.invalid" type="submit" class="button">Guardar</button>
   </fieldset>
 </form>
