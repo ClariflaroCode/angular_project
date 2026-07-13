@@ -1,5 +1,6 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, signal} from '@angular/core';
 import {RouterLink} from '@angular/router';
+import {i_process} from '../process-component/process-interface';
 
 @Component({
   selector: 'app-state-queue-component',
@@ -12,7 +13,6 @@ import {RouterLink} from '@angular/router';
 export class StateQueueComponent {
   @Input() queueName: string = ''; //lo recibe del padre.
   constructor() {
-    //private queueName: string; me sigue pareciendo mágico y loco que lo de arriba haga la declaracion del atributo, cree el parametro formal y a su vez lo asigne.
   }
   getQueueName(){
     return this.queueName;

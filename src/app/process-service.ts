@@ -14,24 +14,20 @@ const URL = "https://6a5138efc576c846dcba4183.mockapi.io/" + recurso;
 //@Service()  //SUPUESTAMENTE no necesita usar el decorador @Injectable y este nuevo decorador hace lo mismo que arriba, lo veremos en el próximo capítulo muchachos. :D PD: Se rompió todo :D
 //[ERROR] NG2028: @Service class cannot use constructor dependency injection. Use the `inject` function instead. <--adjunto error por si les pasa con otro alumno, tamb tira error si tenes los dos. automaticamente te crea el de @service con el comando
 export class ProcessService {
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
 
+  ) { }
 
-  /*public getAll(): Observable<i_process[]> {
-
-    return this.http.get<i_process[]>(URL);
-  }*/
   public post(process: i_process): Observable<HttpEvent<i_process>> {
     return this.http.post<i_process>(URL, process, {
       observe: 'events'
     });
   }
-  /*public getByState(estado : string): Observable<i_process[]> {
-    const parametros = 'state=' + estado;
-    let params = new HttpParams({fromString: parametros });
-    return this.http.get<i_process[]>(URL, { params });
-  }*/
+
   public getAll(estado: string | null = null): Observable<i_process[]> {
+      // NOTA: ES IMPORTANTE RECORDAR QUE MOCKAPI ME VA A TIRAR ERROR 404 CADA VEZ Q TENGA UN ARRAY VACIO, PORQUE RESPONDE
+    //ASI LA API, ESTA MAL QUE RESPONDA ASI PERO NO LA PROGRAMÉ YO WEY :d ESTO LO VIMOS EN WEB 1.
     let params = new HttpParams();
 
     if (estado) {
@@ -40,5 +36,8 @@ export class ProcessService {
 
     return this.http.get<i_process[]>(URL, { params });
   }
-
+  public update(id: string, processData: i_process): Observable<i_process> {
+    console.log("PUT", id, structuredClone(processData));
+    return this.http.put<i_process>(URL + "/" + id, processData);
+  }
 }

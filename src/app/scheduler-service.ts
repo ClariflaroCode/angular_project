@@ -1,5 +1,6 @@
 import {Injectable, Service, signal} from '@angular/core';
 import {i_process} from './process-component/process-interface';
+import {ProcessService} from './process-service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,15 +8,17 @@ import {i_process} from './process-component/process-interface';
 export class SchedulerService {
 
   clock = 0;
+  newQueue = signal<i_process[]>([]);
   readyQueue = signal<i_process[]>([]);
   runningProceso = signal<i_process | null>(null);
   waitingQueue = signal<i_process[]>([]);
   terminatedQueue = signal<i_process[]>([]);
+  public necesitaRefresco = signal<boolean>(false);
 
   algoritmoElegido = "FIFO";
   currentSimulation = "ejemplo";
 
-  constructor() {
+  constructor(private processService: ProcessService) {
 
   }
 
@@ -39,57 +42,54 @@ export class SchedulerService {
   public setClock(c: number) {
     this.clock = c;
   }
+  public ejecucionSimulacion(){
 
-  public ejecutarSimulacion(newQueue: i_process[]) {
-    this.setClock(0);
-
-    let ultimaSimulacion = this.getLastSimulacion();
-
-    let currentQuantum = 0;
-    let localReady: i_process[] = [];
-    let localWaiting: i_process[] = [];
-    let localTerminated: i_process[] = [];
-    let localRunning: i_process | null = null;
-
-    console.log('entramos al ejecutar');
     while (
-      (newQueue.length > 0 ||
-        localReady.length > 0 ||
-        localRunning != null ||
-        localWaiting.length > 0) &&
-      this.clock < 50
+      (this.newQueue().length > 0 ||
+        this.readyQueue().length > 0 ||
+        this.runningProceso() != null ||
+        this.waitingQueue().length > 0)
       ) {
-      console.log('seguro bucle infinito aca');
-      console.log(
-        "clock:", this.clock,
-        "new:", newQueue.length,
-        "ready:", localReady.length,
-        "running:", localRunning,
-        "waiting:", localWaiting.length
-      );
-      console.log(newQueue);
-      console.log("clock inicial:", this.getClock());
+      this.pasitoAPasitoSimulacion();
+    }
+    const simulacion = this.calcularEstadisticasSimulacion();
+    this.setClock(0);
+    return simulacion;
+  }
+  public iniciarSimulacion(procesos: i_process[]) {
+    this.clock = 0;
+    this.newQueue.set([...procesos]);
 
-      for (const p of newQueue) {
-        console.log(
-          p.name,
-          p.arrivalTime,
-          typeof p.arrivalTime
-        );
-      }
-
+    this.readyQueue.set([]);
+    this.waitingQueue.set([]);
+    this.runningProceso.set(null);
+    this.terminatedQueue.set([]);
+  }
+  public pasitoAPasitoSimulacion(){
+    //acá hace el pasito a pasito y el usuario tiene que ir tocando el boton para que avance el scheduler.
+    console.log("ANTES", {
+      clock: this.clock,
+      new: this.newQueue().length,
+      ready: this.readyQueue().length,
+      running: this.runningProceso(),
+      waiting: this.waitingQueue().length,
+      terminated: this.terminatedQueue().length
+    });
+    let newQueue: i_process[] = [...this.newQueue()];
+    let localReady: i_process[] = [...this.readyQueue()];
+    let localWaiting: i_process[] = [...this.waitingQueue()];
+    let localTerminated: i_process[] = [...this.terminatedQueue()];
+    let localRunning: i_process | null = this.runningProceso() ? { ...this.runningProceso()! } : null;
 
       let i = 0;
       while (i < newQueue.length) {
-        console.log(
-          "clock:", this.getClock(),
-          "arrival:", newQueue[i].arrivalTime
-        );
+
         if (newQueue[i].arrivalTime == this.getClock()) {
-          console.log("Eliminando", newQueue[i]);
+          newQueue[i].state = 'ready';
+
           localReady.push(newQueue[i]);
+
           newQueue.splice(i, 1); //elimina a partir de la posicion i UN sólo elemento
-          console.log("Nuevo tamaño:", newQueue.length);
           i--; //porque se hace un corrimiento, no quiero moverme de la pos.
         }
         i++;
@@ -99,8 +99,9 @@ export class SchedulerService {
       // acá se ejecuta la funcion elegir que me hayan pasado por parámetro, dependiendo el algoritmo va a cambiar.
       if (!localRunning && localReady.length > 0) {
         localRunning = this.elegirProceso(localReady); // Asignamos el retorno
-        if (localRunning)
+        if (localRunning) {
           localRunning.state = "running";
+        }
       }
 
       // Incremento de waiting time
@@ -110,26 +111,128 @@ export class SchedulerService {
 
       if (localRunning) {
         localRunning.burstTime--;
-        //currentQuantum++
         if (localRunning.burstTime == 0) {
-          localRunning.state = "terminated";
-          //updateProcesoEstado(runningProceso.ID, "terminated") //actualizo en la DB el estado del proceso
+
+          localRunning.state = 'terminated';
           localRunning.completionTime = this.getClock();
           localTerminated.push(localRunning);
+
           localRunning = null;
         }
-
-        //currentQuantum = 0
-
       }
       this.clock++;
-    }
 
+    this.newQueue.set(newQueue);
     this.readyQueue.set(localReady);
     this.terminatedQueue.set(localTerminated);
     this.runningProceso.set(localRunning);
 
-    return this.calcularEstadisticasSimulacion();
+    //this.actualizarProcesos();
+    this.actualizarProcesos(
+      localReady,
+      localRunning,
+      localTerminated
+    );
+    console.log("DESPUÉS", {
+      clock: this.clock,
+      new: this.newQueue().length,
+      ready: this.readyQueue().length,
+      running: this.runningProceso(),
+      waiting: this.waitingQueue().length,
+      terminated: this.terminatedQueue().length
+    });
+    if (
+      this.newQueue().length == 0 &&
+      this.readyQueue().length == 0 &&
+      this.runningProceso() == null &&
+      this.waitingQueue().length == 0){
+      console.log("TERMINÓ LA SIMULACIÓN");
+      this.setClock(0);
+      return this.calcularEstadisticasSimulacion();
+    }
+    return null;
+  }
+
+  /*
+  private actualizarProcesos(){
+
+      for (let p of this.readyQueue()){
+        if(p.id){
+          this.processService.update(p.id, p).subscribe();
+        }
+      }
+
+      const running = this.runningProceso();
+
+      if(running && running.id){
+        this.processService.update(running.id, running).subscribe();
+      }
+
+      for (let p of this.waitingQueue()){
+        if(p.id){
+          this.processService.update(p.id, p).subscribe();
+        }
+      }
+
+      for (let p of this.terminatedQueue()){
+        if(p.id){
+          this.processService.update(p.id, p).subscribe();
+        }
+      }
+
+
+  }*/private actualizarProcesos(
+    ready: i_process[],
+    running: i_process | null,
+    terminated: i_process[]
+  ) {
+    // 1. Apagamos el refresco temporalmente
+    this.necesitaRefresco.set(false);
+
+    // 2. Juntamos todos los procesos que cambiaron en una lista única plana
+    const listaAActualizar: i_process[] = [];
+
+    ready.forEach(p => listaAActualizar.push(p));
+    if (running) listaAActualizar.push(running);
+    terminated.forEach(p => listaAActualizar.push(p));
+
+    // Si no hay nada que actualizar, nos vamos
+    if (listaAActualizar.length === 0) {
+      this.necesitaRefresco.set(true);
+      return;
+    }
+
+    // 3. FUNCIÓN MÁGICA: Envía un proceso a la vez en fila
+    const enviarSiguiente = (index: number) => {
+      // Si ya enviamos todos los procesos de la lista...
+      if (index >= listaAActualizar.length) {
+        console.log("¡TODOS los procesos se guardaron secuencialmente en MockAPI!");
+        this.necesitaRefresco.set(true); // Recién acá le avisamos al componente que refresque
+        return;
+      }
+
+      const proceso = listaAActualizar[index];
+
+      if (proceso.id) {
+        // Mandamos el PUT del proceso actual
+        this.processService.update(proceso.id, structuredClone(proceso)).subscribe({
+          next: () => {
+            console.log(`MockAPI guardó con éxito el ID ${proceso.id} -> Estado: ${proceso.state}`);
+            // CUANDO TERMINA ESTE, recién ahí llamamos al siguiente de la fila
+            enviarSiguiente(index + 1);
+          },
+          error: (err) => {
+            console.error(`Error al guardar ID ${proceso.id}:`, err);
+            // Si falla uno, seguimos con el siguiente para que no se trabe la app
+            enviarSiguiente(index + 1);
+          }
+        });
+      } else {
+        enviarSiguiente(index + 1);
+      }
+    };
+
+    enviarSiguiente(0);
   }
 
   private getLastSimulacion() {

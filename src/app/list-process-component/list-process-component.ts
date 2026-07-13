@@ -30,13 +30,7 @@ export class ListProcessComponent {
   }
 
   ngOnInit(): void {
-/*
-    this.servicioDeProcesos.getAll()
-      .subscribe(procesos => {
-        this.procesos.set(procesos);
-        //this.cdr.detectChanges();
-      });
-*/
+
     this.route.queryParamMap.subscribe(params => {
       this.processService
         .getAll(params.get('state'))

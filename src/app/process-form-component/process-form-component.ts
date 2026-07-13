@@ -48,6 +48,7 @@ export class ProcessFormComponent {
       */
       const state = "new";
       const process: i_process  = {
+        id: null,
         name: proceso.processName,
         priority: proceso.priority,
         burstTime: proceso.burstTime,
@@ -59,6 +60,7 @@ export class ProcessFormComponent {
       this.processService.post(process).subscribe({
         next: (process) => {
           console.log("entramos al segundo suscribe");
+          console.log("UPDATE OK", process);
 
           console.log('Simulación guardada:', process);
           this.router.navigate(['/home']);
