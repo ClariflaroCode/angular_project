@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import { HttpClient, HttpEvent } from '@angular/common/http';
+import {HttpClient, HttpEvent, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {i_simulation} from './simulation-component/simulation-interface';
 
@@ -20,6 +20,14 @@ export class SimulationService {
       observe: 'events'
     });
   }
+  public getUltima(): Observable<i_simulation[]> {
+  const params = new HttpParams()
+    .set('limit', '1')
+    .set('sortBy', 'id')
+    .set('order', 'desc');
+
+  return this.http.get<any[]>(URL, { params });
+}
 
 
 }

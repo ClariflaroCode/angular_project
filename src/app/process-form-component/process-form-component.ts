@@ -15,7 +15,7 @@ export class ProcessFormComponent {
   }
   processForm = new FormGroup({
     processName: new FormControl('proceso', { nonNullable: true , validators: [Validators.required]}),
-    priority: new FormControl(0, { nonNullable: true , validators: [Validators.required, Validators.min(0)]}),
+    prioridad: new FormControl(0, { nonNullable: true , validators: [Validators.required, Validators.min(0)]}),
     burstTime: new FormControl(1, { nonNullable: true , validators: [Validators.required, Validators.min(0)]}),
     arrivalTime: new FormControl(0,  { nonNullable: true , validators: [Validators.required, Validators.min(0)]}),
     //state: new FormControl('new')
@@ -50,7 +50,7 @@ export class ProcessFormComponent {
       const process: i_process  = {
         id: null,
         name: proceso.processName,
-        priority: proceso.priority,
+        prioridad: proceso.prioridad,
         burstTime: proceso.burstTime,
         arrivalTime: proceso.arrivalTime,
         waitingTime: 0,
