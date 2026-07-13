@@ -25,21 +25,6 @@ export class GraphComponent {
     private route: ActivatedRoute,
 
   ) {
-// El effect se ejecuta automáticamente cada vez que 'necesitaRefresco' cambia
-    /*effect(() => { //esta cosita linda me acaba de solucionar un problema que llevo más de 10 horas peleando q es saber cuando pindonga se actualizó las cosas en mockapi,bah, ni siquiera sé si fue ese el problema, inicialmente eran race conditions, desp en el inspeccionar impecable en mockapi como el tuje y no se porq pero anduvo bien con esto que entiendo no hace mucha mas cosa q esperar y renderizar cuando terminaron las solicitudes http con los nuevos componentes, la verdad es q creo q intenté hacer esa cosita simple por demasiado mas rato del q queria :D
-      const debeRefrescar = this.schedulerService.necesitaRefresco();
-
-      if (debeRefrescar) {
-        console.log("El backend terminó de actualizarse. Volviendo a pedir los datos actualizados...");
-
-        this.cargarProcesosDesdeBackend();
-      }
-    });*/
-  }
-  cargarProcesosDesdeBackend() {
-    this.processService.getAll().subscribe(procesos => {
-      this.procesos.set(procesos);
-    });
   }
   private iniciarSimulacion() {
     this.processService.getAll("new").subscribe({
@@ -47,7 +32,15 @@ export class GraphComponent {
         this.schedulerService.iniciarSimulacion(procesos);
         console.log(procesos);
         this.schedulerService.pasitoAPasitoSimulacion();
-      }
+      },
+      error: (err) => {
+        if (err.status === 404) {
+          //MOCKAPI TIRA ERROR DE ESTO SI ESTA VACIO EL RESULTADO, esta mal implementada
+          //como angular me tira al tacho los componentes y me reinicia lo de first time tengo q usar esto porq al cambiar la
+          //ruta me lo vuela y me da error porq se quiere meter aca..
+          this.schedulerService.pasitoAPasitoSimulacion();
+        }
+        }
     });
   }
   protected siguientePaso(){

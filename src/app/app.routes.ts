@@ -38,6 +38,6 @@ export const routes: Routes = [
   },
   {
     path: '**', //por defecto
-    redirectTo: '/home'
+    redirectTo: 'home'  //datazo: si por alguna razon una de estas rutas tiene un / hace f5 y por el /home aca me borraba el clock del scheduler al navegar :D pese a estar en el servicio :')
   }
 ];
