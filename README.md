@@ -1,3 +1,30 @@
+------------------------------------------------------------------------------------------
+Datos personales:
+  Julieta Watts
+  jwatts@alumnos.exa.unicen.edu.ar
+  
+----------------------------------------------------------------------------------------
+El proyecto busca ser un simulador visual y pedagógico del funcionamiento de un scheduler 
+de la cpu. 
+El usuario elige el un algoritmo de planificación: por ahora sólo está implementado el algoritmo fifo (fcfs)
+y escribe el nombre de la simulación que va a ejecutar dentro de un formulario reactivo de Angular. 
+
+Posteriomente el usuario debe crear todos los procesos que quiera en el otro formulario de la aplicación. 
+
+Luego tiene la posibilidad de ejecutar la simulación completa 
+que calcula automaticamente las estadísticas ó seguir la simulación paso a paso que permite
+consultar donde están los procesos en cada ciclo de reloj y luego ver las estadísticas. 
+
+----------------------------------------------------------------------------------------
+Notas: Este proyecto es de alta complejidad, por eso todavía no tiene implementados 
+todos los algoritmos de planificación y tiene algunos problemas relacionados con entiendo yo
+el lag, el listar estadisticas a veces necesita un refresco para ver la ultima consulta pese
+a que redirige sólo cuando se hizo el post de la ultima simulacion y algo parecido ocurre a 
+veces con el reloj aunq este no consulta a api, pero a veces por lag tarda en renderizar. 
+-----------------------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------------------
 # Entregable
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.5.
