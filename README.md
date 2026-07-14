@@ -20,7 +20,8 @@ Notas: Este proyecto es de alta complejidad, por eso todavía no tiene implement
 todos los algoritmos de planificación y tiene algunos problemas relacionados con entiendo yo
 el lag, el listar estadisticas a veces necesita un refresco para ver la ultima consulta pese
 a que redirige sólo cuando se hizo el post de la ultima simulacion y algo parecido ocurre a 
-veces con el reloj aunq este no consulta a api, pero a veces por lag tarda en renderizar. 
+veces con el reloj aunq este no consulta a api, pero a veces por lag tarda en renderizar.
+
 -----------------------------------------------------------------------------------------
 
 
