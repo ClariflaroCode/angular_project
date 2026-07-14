@@ -1,6 +1,7 @@
 import {Injectable, Service, signal} from '@angular/core';
 import {i_process} from './process-component/process-interface';
 import {ProcessService} from './process-service';
+import {i_simulation} from './simulation-component/simulation-interface';
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +46,7 @@ export class SchedulerService {
   }
   public setCurrentSimulationID(id: string) {
     this.currentSimulationID = id;
+    console.log("se seteo el nuevo id: "+ this.currentSimulationID);
   }
   public getCurrentSimulationID(){
     return this.currentSimulationID;
@@ -53,18 +55,39 @@ export class SchedulerService {
     this.clock = c;
   }
   public ejecucionSimulacion(){
-
+    let sim: i_simulation = {
+      algorithm: this.getAlgoritmo(),
+      average_throughput: 0,
+      average_turnaround_time: 0,
+      average_waiting_time: 0,
+      context_switches: 0,
+      dispatch_latency: 0,
+      id: null,
+      name: this.getCurrentSimulationName(),
+      process_time: 0,
+      quantum: 0
+    };
+    let sim2: i_simulation | null = null;
+    //el problema debe estar en la linea de abajo. CORREGIR :d
     while (
       (this.newQueue().length > 0 ||
         this.readyQueue().length > 0 ||
         this.runningProceso() != null ||
         this.waitingQueue().length > 0)
       ) {
-      this.pasitoAPasitoSimulacion();
+      const resultadoPaso = this.pasitoAPasitoSimulacion(false);
+      if (resultadoPaso !== null) {
+        sim2 = resultadoPaso;
+        break;
+      }
     }
-    const simulacion = this.calcularEstadisticasSimulacion();
-    this.setClock(0);
-    return simulacion;
+    if (sim2)
+      return sim2;
+    else
+      return sim; //nunca deberia entrar aca pero bueno..
+    //const simulacion = this.calcularEstadisticasSimulacion();
+    //this.setClock(0);
+
   }
   public iniciarSimulacion(procesos: i_process[]) {
     this.newQueue.set([...procesos]);
@@ -79,7 +102,7 @@ export class SchedulerService {
     this.runningProceso.set(null);
     this.terminatedQueue.set([]);
   }
-  public pasitoAPasitoSimulacion(){
+  public pasitoAPasitoSimulacion(guardarPasosIntermedios: boolean = true){
     //acá hace el pasito a pasito y el usuario tiene que ir tocando el boton para que avance el scheduler.
     console.log("ANTES", {
       clock: this.clock,
@@ -115,6 +138,7 @@ export class SchedulerService {
         localRunning = this.elegirProceso(localReady); // Asignamos el retorno
         if (localRunning) {
           localRunning.state = "running";
+
         }
       }
 
@@ -141,12 +165,15 @@ export class SchedulerService {
     this.terminatedQueue.set(localTerminated);
     this.runningProceso.set(localRunning);
 
+    if (guardarPasosIntermedios) {
+      this.actualizarProcesos(
+        localReady,
+        localRunning,
+        localTerminated
+      );
+    }
     //this.actualizarProcesos();
-    this.actualizarProcesos(
-      localReady,
-      localRunning,
-      localTerminated
-    );
+
     console.log("DESPUÉS", {
       clock: this.clock,
       new: this.newQueue().length,
@@ -161,8 +188,11 @@ export class SchedulerService {
       this.runningProceso() == null &&
       this.waitingQueue().length == 0){
       console.log("TERMINÓ LA SIMULACIÓN");
+      //this.setClock(0);
+      const ultima = this.calcularEstadisticasSimulacion();
       this.setClock(0);
-      return this.calcularEstadisticasSimulacion();
+      console.log(ultima);
+      return ultima;
     }
     return null;
   }
@@ -171,7 +201,7 @@ export class SchedulerService {
     ready: i_process[],
     running: i_process | null,
     terminated: i_process[]
-  ) {  //Esta funcion realmente no sé si está salvando algo, la idea era controlar un poco mejor las solicitudes http.
+  ) {  //Esta funcion realmente no sé si está salvando algo, la idea era controlar un poco mejor las solicitudes http porq creo que tuve problemas de race conditions..
     // 1. Apagamos el refresco temporalmente
     this.necesitaRefresco.set(false);
 
@@ -245,7 +275,6 @@ export class SchedulerService {
     return proceso;
   }
 
-//return clock, terminatedQueue
 
 
   private calcularEstadisticasSimulacion() {
@@ -262,18 +291,17 @@ export class SchedulerService {
       turnaround_time += proceso.completionTime - proceso.arrivalTime;
       waiting_time += proceso.waitingTime;
       contextSwitches++;
-
+      console.log('turnaround' + turnaround_time);
+      console.log('waiting'+waiting_time);
+      console.log('context switches'+contextSwitches);
     }
+    console.log('reloj' + this.clock);
     let averageTurnaroundTime = turnaround_time / localTerminated.length;
     let averageWaitingTime = waiting_time /localTerminated.length;
     let averageThroughput = localTerminated.length / this.getClock();
 
-  /*
-  ultima, err := queries.GetLastSimulacion(context.Background())
-  if err != nil {
-    log.Println("Error al obtener la última simulación:", err)
-    return
-  }*/
+    console.log('cantidad de procesos terminados:' + localTerminated.length);
+
       const ultimaSimulacion = {
         id: null,
         name: this.getCurrentSimulationName(),
@@ -284,7 +312,7 @@ export class SchedulerService {
         average_waiting_time: averageWaitingTime,
         average_throughput: averageThroughput,
         algorithm: this.getAlgoritmo(),
-        quantum: 10,
+        quantum: 0,
       }
       return ultimaSimulacion;
     }

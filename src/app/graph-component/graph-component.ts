@@ -75,12 +75,23 @@ export class GraphComponent {
       alert('Falta completar el formulario de simulacion');
       return;
     }
-    const ultimaSimulacion = this.schedulerService.ejecucionSimulacion();
-    this.simulationService.post(ultimaSimulacion).subscribe({
-      next: (data) => {
-        this.router.navigate(['/estadisticas']);
-      },
-      error: (err) => console.error('Error al guardar:', err)
+    this.processService.getAll("new").subscribe({
+      next: (procesos) => {
+        if (procesos.length === 0) {
+          alert("No hay procesos cargados para simular.");
+          return;
+        }
+
+        this.schedulerService.iniciarSimulacion(procesos);
+
+        const ultimaSimulacion = this.schedulerService.ejecucionSimulacion();
+        this.simulationService.post(ultimaSimulacion).subscribe({
+          next: (data) => {
+            this.router.navigate(['/estadisticas']);
+          },
+          error: (err) => console.error('Error al guardar:', err)
+        });
+      }
     });
 
   }

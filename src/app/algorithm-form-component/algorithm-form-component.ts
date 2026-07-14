@@ -33,8 +33,8 @@ export class AlgorithmFormComponent {
       this.simulationService.getUltima().subscribe({
         next: (data) => {
 
-          if (data[0]) {
-            const ultimoID = data[0].id;
+          if (data) {
+            const ultimoID = data.id;
             const currentID = Number(ultimoID) + 1;
             console.log(currentID);
             this.schedulerService.setCurrentSimulationID(String(currentID));

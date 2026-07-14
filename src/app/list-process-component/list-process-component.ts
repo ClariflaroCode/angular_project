@@ -31,6 +31,7 @@ export class ListProcessComponent {
   }
 
   ngOnInit(): void {
+    console.log(this.schedulerService.getCurrentSimulationID());
 
     this.route.queryParamMap.subscribe(params => {
       this.processService
