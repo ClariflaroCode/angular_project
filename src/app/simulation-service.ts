@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpEvent, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpEvent} from '@angular/common/http';
 import {map, Observable} from 'rxjs';
 import {i_simulation} from './simulation-component/simulation-interface';
 
@@ -10,7 +10,6 @@ const URL = "https://6a5138efc576c846dcba4183.mockapi.io/" + recurso;
   providedIn: 'root'
 })
 export class SimulationService {
-  private currentID= '';
   constructor(private http: HttpClient) { }
 
   public getAll(): Observable<i_simulation[]> {

@@ -14,7 +14,12 @@
 .input {
   padding: .5rem;
   border-radius: 5px;
-  width: 80%;
+  width: 40%;
+}
+select {
+  padding: .5rem;
+  border-radius: 5px;
+  width: 40%;
 }
 .button {
   border-radius: 10px;
@@ -22,4 +27,11 @@
   color: white;
   padding: 8px;
   cursor: pointer;
+}
+.invalid {
+  color: lightcoral;
+  border: 3px solid rgb(255 84 84);
+}
+.invalidForm {
+  background-color: rgb(168 168 168);
 }

@@ -1,5 +1,4 @@
 import {Component, Input} from '@angular/core';
-import {i_process} from '../process-component/process-interface';
 import {i_simulation} from './simulation-interface';
 
 @Component({
