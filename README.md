@@ -4,16 +4,17 @@ Datos personales:
   jwatts@alumnos.exa.unicen.edu.ar
   
 ----------------------------------------------------------------------------------------
+Scheduler OS Simulator: 
 El proyecto busca ser un simulador visual y pedagógico del funcionamiento de un scheduler 
 de la cpu. 
-El usuario elige el un algoritmo de planificación: por ahora sólo está implementado el algoritmo fifo (fcfs)
-y escribe el nombre de la simulación que va a ejecutar dentro de un formulario reactivo de Angular. 
-
-Posteriomente el usuario debe crear todos los procesos que quiera en el otro formulario de la aplicación. 
-
-Luego tiene la posibilidad de ejecutar la simulación completa 
+El usuario elige un algoritmo de planificación 
+(por ahora sólo está implementado el algoritmo First Come First Serve (FCFS)), 
+crea los procesos que quiera probar estableciendo: tiempos de llegada (arrival time) y cantidad de ciclos de 
+ejecución que necesita dicho proceso (burst time). Luego tiene la posibilidad de ejecutar la simulación completa 
 que calcula automaticamente las estadísticas ó seguir la simulación paso a paso que permite
 consultar donde están los procesos en cada ciclo de reloj y luego ver las estadísticas. 
+El objetivo del proyecto es facilitar la comprensión del comportamiento de los procesos dentro de la cpu, 
+las diferencias entre los distintos algoritmos de planificación y ser una herramienta de apoyo y verificación de resultados. 
 
 ----------------------------------------------------------------------------------------
 
