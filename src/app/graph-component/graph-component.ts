@@ -1,16 +1,14 @@
-import {Component, effect, signal} from '@angular/core';
+import {Component, signal} from '@angular/core';
 import {StateQueueComponent} from '../state-queue-component/state-queue-component';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {SchedulerService} from '../scheduler-service';
 import {ProcessService} from '../process-service';
 import {SimulationService} from '../simulation-service';
 import {i_process} from '../process-component/process-interface';
-import {ListProcessComponent} from '../list-process-component/list-process-component';
-import {AlgorithmFormComponent} from '../algorithm-form-component/algorithm-form-component';
 
 @Component({
   selector: 'app-graph-component',
-  imports: [StateQueueComponent, ListProcessComponent, AlgorithmFormComponent],
+  imports: [StateQueueComponent],
   templateUrl: './graph-component.html',
   styleUrl: './graph-component.css',
 })
@@ -24,7 +22,6 @@ export class GraphComponent {
     private simulationService: SimulationService,
     private processService: ProcessService,
     private router: Router,
-    private route: ActivatedRoute,
 
   ) {
   }
@@ -59,7 +56,7 @@ export class GraphComponent {
 
     if(ultimaSimulacion){
       this.simulationService.post(ultimaSimulacion).subscribe({
-        next: (data) => {
+        next: () => {
           this.router.navigate(['/estadisticas']);
         },
         error: (err) => console.error('Error al guardar:', err)
@@ -86,7 +83,7 @@ export class GraphComponent {
 
         const ultimaSimulacion = this.schedulerService.ejecucionSimulacion();
         this.simulationService.post(ultimaSimulacion).subscribe({
-          next: (data) => {
+          next: () => {
             this.router.navigate(['/estadisticas']);
           },
           error: (err) => console.error('Error al guardar:', err)

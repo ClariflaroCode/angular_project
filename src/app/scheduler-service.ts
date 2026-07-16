@@ -1,4 +1,4 @@
-import {Injectable, Service, signal} from '@angular/core';
+import {Injectable, signal} from '@angular/core';
 import {i_process} from './process-component/process-interface';
 import {ProcessService} from './process-service';
 import {i_simulation} from './simulation-component/simulation-interface';
@@ -68,7 +68,6 @@ export class SchedulerService {
       quantum: 0
     };
     let sim2: i_simulation | null = null;
-    //el problema debe estar en la linea de abajo. CORREGIR :d
     while (
       (this.newQueue().length > 0 ||
         this.readyQueue().length > 0 ||
@@ -85,8 +84,6 @@ export class SchedulerService {
       return sim2;
     else
       return sim; //nunca deberia entrar aca pero bueno..
-    //const simulacion = this.calcularEstadisticasSimulacion();
-    //this.setClock(0);
 
   }
   public iniciarSimulacion(procesos: i_process[]) {
@@ -201,26 +198,21 @@ export class SchedulerService {
     ready: i_process[],
     running: i_process | null,
     terminated: i_process[]
-  ) {  //Esta funcion realmente no sé si está salvando algo, la idea era controlar un poco mejor las solicitudes http porq creo que tuve problemas de race conditions..
-    // 1. Apagamos el refresco temporalmente
+  ) {
     this.necesitaRefresco.set(false);
 
-    // 2. Juntamos todos los procesos que cambiaron en una lista única plana
     const listaAActualizar: i_process[] = [];
 
     ready.forEach(p => listaAActualizar.push(p));
     if (running) listaAActualizar.push(running);
     terminated.forEach(p => listaAActualizar.push(p));
 
-    // Si no hay nada que actualizar, nos vamos
     if (listaAActualizar.length === 0) {
       this.necesitaRefresco.set(true);
       return;
     }
 
-    // 3. FUNCIÓN MÁGICA: Envía un proceso a la vez en fila
     const enviarSiguiente = (index: number) => {
-      // Si ya enviamos todos los procesos de la lista...
       if (index >= listaAActualizar.length) {
         console.log("¡TODOS los procesos se guardaron secuencialmente en MockAPI!");
         this.necesitaRefresco.set(true); // Recién acá le avisamos al componente que refresque
@@ -230,16 +222,13 @@ export class SchedulerService {
       const proceso = listaAActualizar[index];
 
       if (proceso.id) {
-        // Mandamos el PUT del proceso actual
         this.processService.update(proceso.id, structuredClone(proceso)).subscribe({
           next: () => {
             console.log(`MockAPI guardó con éxito el ID ${proceso.id} -> Estado: ${proceso.state}`);
-            // CUANDO TERMINA ESTE, recién ahí llamamos al siguiente de la fila
             enviarSiguiente(index + 1);
           },
           error: (err) => {
             console.error(`Error al guardar ID ${proceso.id}:`, err);
-            // Si falla uno, seguimos con el siguiente para que no se trabe la app
             enviarSiguiente(index + 1);
           }
         });
@@ -249,10 +238,6 @@ export class SchedulerService {
     };
 
     enviarSiguiente(0);
-  }
-
-  private getLastSimulacion() {
-
   }
 
   private elegirProceso(readyQueue: i_process[]) {
@@ -279,8 +264,6 @@ export class SchedulerService {
 
   private calcularEstadisticasSimulacion() {
 
-    //TO-DO calcular avg waiting time, avg turnaround time, avg response time, cpu utilization, throughput
-    //y guardar en la tabla estadisticas_simulacion
     let turnaround_time = 0;
     let waiting_time = 0;
     let contextSwitches = 0;

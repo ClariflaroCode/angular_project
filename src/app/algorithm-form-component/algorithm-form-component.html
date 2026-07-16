@@ -5,10 +5,10 @@
     <legend>Nueva simulacion</legend>
 
     <label for="nombre">Nombre de la simulacion</label>
-    <input type="text" name="nombre" id="nombre" formControlName="simulationName" placeholder="Nombre de la simulacion">
+    <input [class.invalid]="algorithmForm.get('simulationName')?.invalid" class="input" type="text" name="nombre" id="nombre" formControlName="simulationName" placeholder="Nombre de la simulacion">
 
     <label for="algoritmo">Elegir el algoritmo de planificacion</label>
-    <select id="algoritmo" name="algoritmo" formControlName="algorithmName">
+    <select [class.invalid]="algorithmForm.get('algorithmName')?.invalid" id="algoritmo" name="algoritmo" formControlName="algorithmName">
       <option value="first_come_first_serve">First come First Serve</option>
       <option value="round_robin">Round Robin</option>
       <option value="prioridad">Prioridad</option>
@@ -21,6 +21,6 @@
 
     </div>
 
-    <button [disabled]="algorithmForm.invalid" type="submit" class="button">Guardar</button>
+    <button [class.invalidForm]="algorithmForm.invalid" [disabled]="algorithmForm.invalid" type="submit" class="button">Guardar</button>
   </fieldset>
 </form>

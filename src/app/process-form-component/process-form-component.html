@@ -4,21 +4,18 @@
       <legend>Crear proceso</legend>
 
       <label for="nombre">Nombre</label>
-      <input name="name" id="nombre" type="text" formControlName="processName" placeholder="Ingrese el nombre del proceso" />
+      <input [class.invalid]="processForm.get('processName')?.invalid"  class="input"  name="name" id="nombre" type="text" formControlName="processName" placeholder="Ingrese el nombre del proceso" />
 
       <label for="prioridad">Prioridad</label>
-      <input type="number" name="prioridad" id="prioridad" formControlName="prioridad" placeholder="Ingrese la prioridad del proceso" />
+      <input [class.invalid]="processForm.get('prioridad')?.invalid"  class="input"  type="number" name="prioridad" id="prioridad" formControlName="prioridad" placeholder="Ingrese la prioridad del proceso" />
 
       <label for="burst_time">Burst Time</label>
-      <input type="number" name="burst_time" id="burst_time" formControlName="burstTime" placeholder="Ingrese el burst time del proceso" required />
+      <input [class.invalid]="processForm.get('burstTime')?.invalid"  class="input" type="number" name="burst_time" id="burst_time" formControlName="burstTime" placeholder="Ingrese el burst time del proceso" required />
 
       <label for="arrival_time">Arrival time</label>
-      <input type="number" name="arrival_time" id="arrival_time" formControlName="arrivalTime" placeholder="Ingrese el arrival time del proceso" required />
+      <input [class.invalid]="processForm.get('arrivalTime')?.invalid" class="input" type="number" name="arrival_time" id="arrival_time" formControlName="arrivalTime" placeholder="Ingrese el arrival time del proceso" required />
 
-      <!--<input type="hidden" name="estado" id="estado" formControlName="state"/>-->
-
-
-      <button [disabled]="processForm.invalid" class="button" type="submit">Enviar</button>
+      <button [class.invalidForm]="processForm.invalid" [disabled]="processForm.invalid" class="button" type="submit">Enviar</button>
     </fieldset>
   </form>
 </section>

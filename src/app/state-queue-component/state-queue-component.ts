@@ -1,6 +1,5 @@
-import {Component, Input, signal} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {RouterLink} from '@angular/router';
-import {i_process} from '../process-component/process-interface';
 import {SchedulerService} from '../scheduler-service';
 
 @Component({
@@ -14,7 +13,6 @@ import {SchedulerService} from '../scheduler-service';
 export class StateQueueComponent {
   @Input() queueName: string = ''; //lo recibe del padre.
   protected currentID = '';
-  disabled: any;
   constructor(private schedulerService: SchedulerService) {
     this.currentID = schedulerService.getCurrentSimulationID();
     console.log(this.currentID);

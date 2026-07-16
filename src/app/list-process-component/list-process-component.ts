@@ -1,11 +1,8 @@
-import {ChangeDetectorRef, Component, Injectable, Input, signal} from '@angular/core';
-import {SimulationComponent} from '../simulation-component/simulation-component';
+import { Component, Input, signal} from '@angular/core';
 import {ProcessComponent} from '../process-component/process-component';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
 import {ProcessService} from '../process-service';
 import {i_process} from '../process-component/process-interface';
-import {ActivatedRoute, Route, Router} from '@angular/router';
+import {ActivatedRoute } from '@angular/router';
 import {SchedulerService} from '../scheduler-service';
 
 @Component({
