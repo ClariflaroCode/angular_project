@@ -16,6 +16,8 @@ export class SchedulerService {
   terminatedQueue = signal<i_process[]>([]);
   public necesitaRefresco = signal<boolean>(false);
 
+  public isSaving = signal<boolean>(false);
+
 
   algoritmoElegido = "FIFO";
   currentSimulation = "ejemplo";
@@ -152,7 +154,7 @@ export class SchedulerService {
         if (localRunning.burstTime == 0) {
 
           localRunning.state = 'terminated';
-          localRunning.completionTime = this.getClock();
+          localRunning.completionTime = this.getClock() + 1;
           localTerminated.push(localRunning);
 
           localRunning = null;
@@ -171,58 +173,79 @@ export class SchedulerService {
         localRunning,
         localTerminated
       );
+      console.log("DESPUÉS", {
+        clock: this.clock,
+        new: this.newQueue().length,
+        ready: this.readyQueue().length,
+        running: this.runningProceso(),
+        waiting: this.waitingQueue().length,
+        terminated: this.terminatedQueue().length
+      });
+      if (
+        this.newQueue().length == 0 &&
+        this.readyQueue().length == 0 &&
+        this.runningProceso() == null &&
+        this.waitingQueue().length == 0){
+        console.log("TERMINÓ LA SIMULACIÓN");
+        //this.setClock(0);
+        const ultima = this.calcularEstadisticasSimulacion();
+        this.setClock(0);
+        console.log(ultima);
+        return ultima;
+      }
+      return null;
+    } else {
+
+      console.log("DESPUÉS", {
+        clock: this.clock,
+        new: this.newQueue().length,
+        ready: this.readyQueue().length,
+        running: this.runningProceso(),
+        waiting: this.waitingQueue().length,
+        terminated: this.terminatedQueue().length
+      });
+      if (
+        this.newQueue().length == 0 &&
+        this.readyQueue().length == 0 &&
+        this.runningProceso() == null &&
+        this.waitingQueue().length == 0){
+        console.log("TERMINÓ LA SIMULACIÓN");
+        //this.setClock(0);
+        const ultima = this.calcularEstadisticasSimulacion();
+        this.setClock(0);
+        console.log(ultima);
+        return ultima;
+      }
+      return null;
     }
     //this.actualizarProcesos();
 
-    console.log("DESPUÉS", {
-      clock: this.clock,
-      new: this.newQueue().length,
-      ready: this.readyQueue().length,
-      running: this.runningProceso(),
-      waiting: this.waitingQueue().length,
-      terminated: this.terminatedQueue().length
-    });
-    if (
-      this.newQueue().length == 0 &&
-      this.readyQueue().length == 0 &&
-      this.runningProceso() == null &&
-      this.waitingQueue().length == 0){
-      console.log("TERMINÓ LA SIMULACIÓN");
-      //this.setClock(0);
-      const ultima = this.calcularEstadisticasSimulacion();
-      this.setClock(0);
-      console.log(ultima);
-      return ultima;
-    }
-    return null;
   }
 
  private actualizarProcesos(
     ready: i_process[],
     running: i_process | null,
     terminated: i_process[]
-  ) {  //Esta funcion realmente no sé si está salvando algo, la idea era controlar un poco mejor las solicitudes http porq creo que tuve problemas de race conditions..
-    // 1. Apagamos el refresco temporalmente
-    this.necesitaRefresco.set(false);
+  ) {
 
-    // 2. Juntamos todos los procesos que cambiaron en una lista única plana
+    this.necesitaRefresco.set(false);
+    this.isSaving.set(true);
+
     const listaAActualizar: i_process[] = [];
 
     ready.forEach(p => listaAActualizar.push(p));
     if (running) listaAActualizar.push(running);
     terminated.forEach(p => listaAActualizar.push(p));
 
-    // Si no hay nada que actualizar, nos vamos
     if (listaAActualizar.length === 0) {
       this.necesitaRefresco.set(true);
       return;
     }
 
-    // 3. FUNCIÓN MÁGICA: Envía un proceso a la vez en fila
     const enviarSiguiente = (index: number) => {
-      // Si ya enviamos todos los procesos de la lista...
       if (index >= listaAActualizar.length) {
         console.log("¡TODOS los procesos se guardaron secuencialmente en MockAPI!");
+        this.isSaving.set(false);
         this.necesitaRefresco.set(true); // Recién acá le avisamos al componente que refresque
         return;
       }
@@ -230,16 +253,14 @@ export class SchedulerService {
       const proceso = listaAActualizar[index];
 
       if (proceso.id) {
-        // Mandamos el PUT del proceso actual
         this.processService.update(proceso.id, structuredClone(proceso)).subscribe({
           next: () => {
             console.log(`MockAPI guardó con éxito el ID ${proceso.id} -> Estado: ${proceso.state}`);
-            // CUANDO TERMINA ESTE, recién ahí llamamos al siguiente de la fila
             enviarSiguiente(index + 1);
+
           },
           error: (err) => {
             console.error(`Error al guardar ID ${proceso.id}:`, err);
-            // Si falla uno, seguimos con el siguiente para que no se trabe la app
             enviarSiguiente(index + 1);
           }
         });

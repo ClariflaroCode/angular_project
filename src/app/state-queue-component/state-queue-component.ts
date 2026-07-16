@@ -15,7 +15,7 @@ export class StateQueueComponent {
   @Input() queueName: string = ''; //lo recibe del padre.
   protected currentID = '';
   disabled: any;
-  constructor(private schedulerService: SchedulerService) {
+  constructor(protected schedulerService: SchedulerService) {
     this.currentID = schedulerService.getCurrentSimulationID();
     console.log(this.currentID);
   }
