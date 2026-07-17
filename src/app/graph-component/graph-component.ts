@@ -14,7 +14,7 @@ import {i_process} from '../process-component/process-interface';
 })
 export class GraphComponent {
   states = ['new', 'ready', 'running', 'waiting', 'terminated'];
-  private firstTime: boolean = true;
+  protected firstTime: boolean = true;
 
   procesos = signal<i_process[]>([]);
   constructor(
@@ -75,7 +75,11 @@ export class GraphComponent {
     this.processService.getAll("new").subscribe({
       next: (procesos) => {
         if (procesos.length === 0) {
-          alert("No hay procesos cargados para simular.");
+          alert("No hay procesos nuevos para simular.");
+          //jajaja sí me estoy dando cuenta q definitivamente sería mejor que puedas ejecutar un siguiente paso
+          //y si te aburris tocar el ejecucion completa para que termine sola, pero eso
+          //no fue planeado desde un inicio en el diseño. Para que quede claro que esa genial idea no la pensé
+          // veré si puedo ponerle el boton celeste.
           return;
         }
 

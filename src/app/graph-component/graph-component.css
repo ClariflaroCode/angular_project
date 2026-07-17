@@ -31,3 +31,9 @@
   gap: 1rem;
 
 }
+.firstTime {
+  background-color: rgb(168 168 168);
+}
+.firstTime:hover, .firstTime:active{
+  background-color: rgb(168 168 168);
+}

@@ -1,6 +1,3 @@
-
-<!--<app-algorithm-form-component></app-algorithm-form-component>-->
-
 <h2>Simulacion {{this.getNombreSimulacion()}}</h2>
 <h2>Algoritmo: {{this.getAlgoritmo()}}</h2>
 <h2>Clock: {{this.getClock()}}</h2>
@@ -11,16 +8,11 @@
       <app-state-queue-component  [queueName]="state"></app-state-queue-component>
     }
   </section>
-  <!--<a [routerLink]="['/estadisticas']" class="button" id="comenzar">Comenzar</a>-->
 
   <section class="button-section">
     <button (click)="siguientePaso()" class="button comenzar">Ejecutar siguiente paso</button>
-    <button (click)="ejecucionCompleta()" class="button comenzar">Ejecución completa</button>
+    <button (click)="ejecucionCompleta()" [disabled]="!firstTime" [class.firstTime]="!firstTime"  class="button comenzar">Ejecución completa</button>
   </section>
 
-  <!--
-  <section class="card-container">
-    <app-list-process-component [procesos]='procesos'></app-list-process-component>
-  </section>-->
 </section>
 
