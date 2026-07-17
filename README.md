@@ -6,7 +6,11 @@ Datos personales:
 ----------------------------------------------------------------------------------------
 El proyecto busca ser un simulador visual y pedagógico del funcionamiento de un scheduler 
 de la cpu. 
-El usuario elige el un algoritmo de planificación: por ahora sólo está implementado el algoritmo fifo (fcfs)
+El usuario elige el un algoritmo de planificación: por ahora sólo están implementados los algoritmos de:
+prioridad (el scheduler elige por prioridad ascendente los procesos), shortest job first sin desalojo (el
+scheduler elige a los de menor tiempo de burst time que estén en la cola de ready al momento de pasar
+un proceso a ejecución) y el first come first serve (fcfs) que es un algoritmo fifo que el primero en entrar
+a la fila de listos es el primero en ser elegido para ejecutarse; 
 y escribe el nombre de la simulación que va a ejecutar dentro de un formulario reactivo de Angular. 
 
 Posteriomente el usuario debe crear todos los procesos que quiera en el otro formulario de la aplicación. 

@@ -2,6 +2,7 @@ import {Injectable, Service, signal} from '@angular/core';
 import {i_process} from './process-component/process-interface';
 import {ProcessService} from './process-service';
 import {i_simulation} from './simulation-component/simulation-interface';
+import {popResultSelector} from 'rxjs/internal/util/args';
 
 @Injectable({
   providedIn: 'root'
@@ -253,7 +254,12 @@ export class SchedulerService {
       case 'first_come_first_serve':
         proceso = this.FirstComeFirstServe(readyQueue);
         break;
-      //aca se supone que irían todos, es demo muchachos :D
+      case 'shortest_job_first':
+        proceso = this.shortestJobFirst(readyQueue);
+        break;
+      case 'priority':
+        proceso = this.PriorityAlgorithm(readyQueue);
+        break;//aca se supone que irían todos, es demo muchachos :D
       default:
         proceso = this.FirstComeFirstServe(readyQueue);
         break;
@@ -267,7 +273,58 @@ export class SchedulerService {
     return proceso;
   }
 
+  private buscaPosMenor(readyQueue: i_process[]) {
+    let posMenor: number  = 0;
+    for (let i=0; i < readyQueue.length; i++){
+      if (readyQueue[i].burstTime < readyQueue[posMenor].burstTime){
+        posMenor = i;
+      }
+    }
+    return posMenor;
+  }
+  private shortestJobFirst(readyQueue: i_process[]) {
+    //sin desalojo
+    let posMin = this.buscaPosMenor(readyQueue);
+    let proceso = readyQueue[posMin];
+    readyQueue.splice(posMin,1);
+    return proceso;
+  }
+/*func ShortestJobFirstPreemptive(ready []*db.Proceso, running *db.Proceso) (*db.Proceso, []*db.Proceso) {
+  if len(ready) > 0{ //como es con desalojo, no importa si hay o no un proceso en ejecución en el scheduler, se desaloja si llega alguno con menos burst time.
+    posMin := buscaMenor(ready)
+    if running != nil {
+      if running.BurstTime > ready[posMin].BurstTime {
+        running.Estado = "ready"
+        ready = append(ready, running) //el proceso que estaba en ejecución vuelve a la fila de ready
+      } else {
+        return running, ready
+      }
+    }
 
+    running = ready[posMin]
+    running.Estado = "running"
+    ready = append(ready[:posMin], ready[posMin+1:]...) //elimina el elemento minimo de ready.
+
+  }
+  return running, ready
+}
+
+ */
+  private  buscarProcesoDeMayorPrioridad(readyQueue: i_process[]) {
+    let posMayor: number = 0;
+    for (let i = 0; i < readyQueue.length; i++){
+      if (readyQueue[i].prioridad < readyQueue[posMayor].prioridad){
+        posMayor = i;
+      }
+    }
+    return posMayor;
+  }
+  private PriorityAlgorithm(readyQueue: i_process[]){
+    let posMayor = this.buscarProcesoDeMayorPrioridad(readyQueue);
+    let proceso = readyQueue[posMayor];
+    readyQueue.splice(posMayor, 1);
+    return proceso;
+  }
 
   private calcularEstadisticasSimulacion() {
 

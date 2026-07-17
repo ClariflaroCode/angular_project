@@ -51,7 +51,7 @@ export class AlgorithmFormComponent {
   }
 
   private validAlgorithm(control: AbstractControl): ValidationError | null {
-    const validAlgorithms = ['first_come_first_serve'];
+    const validAlgorithms = ['first_come_first_serve', 'shortest_job_first', 'prioridad'];
     const valor = control.get('algorithmName')?.value;
     if (validAlgorithms.includes(valor))
       return null;
