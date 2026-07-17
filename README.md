@@ -25,7 +25,7 @@ a que redirige sólo cuando se hizo el post de la ultima simulacion y algo parec
 veces con el reloj aunq este no consulta a api, pero a veces por lag tarda en renderizar.
 
 -----------------------------------------------------------------------------------------
-
+La rama de mejorando tiene la implementación de los otros algoritmos además del fifo. 
 
 ------------------------------------------------------------------------------------------
 # Entregable
